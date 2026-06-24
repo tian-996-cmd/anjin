@@ -527,8 +527,8 @@
             font-family: var(--font-heading); font-size: 1.2rem; color: var(--text-dark); margin-bottom: 6px;
         }
         .qr-modal__body .qr-hint { font-size: 0.85rem; color: var(--text-body); margin-bottom: 22px; }
-        #qr-code-container { display: inline-block; padding: 14px; border: 2px dashed var(--border); border-radius: var(--radius-md); }
-        #qr-code-container canvas { display: block; }
+        #qr-code-container { display: inline-block; padding: 10px; border: 2px dashed var(--border); border-radius: var(--radius-md); }
+        #qr-code-container img { display: block; width: 200px; height: 200px; }
         .qr-modal__body .qr-tip { font-size: 0.78rem; color: var(--text-light); margin-top: 14px; }
 
         /* Back to top */
@@ -1005,7 +1005,6 @@
     <!-- ============================================
          SCRIPTS
          ============================================ -->
-    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             initMobileMenu();
@@ -1113,8 +1112,9 @@
         /* QR */
         function initQRCode() {
             const c = document.getElementById('qr-code-container');
-            if (typeof QRCode === 'undefined') { c.innerHTML = '<p style="color:#999;">二维码加载失败</p>'; return; }
-            new QRCode(c, { text: window.location.href, width: 200, height: 200, colorDark: '#3D1519', colorLight: '#FFFFFF', correctLevel: QRCode.CorrectLevel.M });
+            const url = encodeURIComponent(window.location.href);
+            const qrSrc = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${url}&bgcolor=ffffff&color=3D1519`;
+            c.innerHTML = `<img src="${qrSrc}" alt="扫描二维码访问本页面" onerror="this.parentElement.innerHTML='<p style=color:#999;padding:20px>二维码加载失败<br>请手动分享链接</p>'">`;
         }
         function initQRModal() {
             const f = document.getElementById('qrFloat'), m = document.getElementById('qrModal'), o = document.getElementById('qrOverlay'), x = document.getElementById('qrClose');
